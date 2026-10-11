@@ -1,8 +1,30 @@
 import { useState, useEffect } from 'react'
-import { supabase } from './lib/supabase'
+import { supabase, isSupabaseConfigured } from './lib/supabase'
 import type { User } from '@supabase/supabase-js'
 
+function MissingConfig() {
+  return (
+    <div className="container">
+      <header>
+        <h1>PrintLagbe</h1>
+        <p>Motion Storefront & Quote Requests</p>
+      </header>
+      <main>
+        <div className="message error">
+          This site isn't configured yet. Set the VITE_SUPABASE_URL and
+          VITE_SUPABASE_ANON_KEY environment variables and redeploy.
+        </div>
+      </main>
+    </div>
+  )
+}
+
 function App() {
+  if (!isSupabaseConfigured) return <MissingConfig />
+  return <Storefront />
+}
+
+function Storefront() {
   const [user, setUser] = useState<User | null>(null)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
